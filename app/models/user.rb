@@ -10,4 +10,7 @@ class User < ActiveRecord::Base
     self.role ||= :user
   end
 
+  def display_name
+    self.name || self.email.split('@').first
+  end
 end

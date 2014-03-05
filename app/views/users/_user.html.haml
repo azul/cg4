@@ -1,5 +1,5 @@
 %td
   - if policy(user).show?
-    = link_to user.email, user
+    = link_to user.display_name, user
   - else
-    = user.name || user.email
+    = user.display_name
