@@ -6,8 +6,8 @@ class UserPolicy
     @record = record
   end
 
-  def index?
-    @user.admin?
+  def show?
+    user == record
   end
 
   def update?

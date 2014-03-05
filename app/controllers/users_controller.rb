@@ -1,19 +1,14 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!
-  after_action :verify_authorized, except: [:show]
+  after_action :verify_authorized, except: [:index]
 
   def index
     @users = User.all
-    authorize @users
   end
 
   def show
     @user = User.find(params[:id])
-    unless current_user.admin?
-      unless @user == current_user
-        redirect_to root_path, :alert => "Access denied."
-      end
-    end
+    authorize @user
   end
 
   def update
