@@ -8,5 +8,9 @@ FactoryGirl.define do
     password_confirmation 'changeme'
     # required if the Devise Confirmable module is used
     confirmed_at Time.now
+
+    factory :public_user do
+      visibility :visible_to_public
+    end
   end
 end

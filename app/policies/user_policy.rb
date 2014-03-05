@@ -1,21 +1,20 @@
-class UserPolicy
-  attr_reader :user, :record
-
-  def initialize(user, record)
-    @user = user
-    @record = record
+UserPolicy = Struct.new(:user, :me) do
+  self::Scope = Struct.new(:user, :scope) do
+    def resolve
+      scope.visible_to(user)
+    end
   end
 
   def show?
-    user == record
+    me.visible_to?(user)
   end
 
   def update?
-    @user.admin?
+    user.admin?
   end
 
   def destroy?
-    @user.admin?
+    user.admin?
   end
 
 end
