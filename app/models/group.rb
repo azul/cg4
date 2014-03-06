@@ -10,7 +10,7 @@ class Group < ActiveRecord::Base
 
   def visible_to?(user)
     if user.present?
-      visible_to_users?
+      visible_to_users? || visible_to_public?
     else
       visible_to_public?
     end
