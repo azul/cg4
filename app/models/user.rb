@@ -19,13 +19,13 @@ class User < ActiveRecord::Base
 
   def visible_to?(other_user)
     if other_user.present?
-      visible_to_users?
+      other_user == self || visible_to_users?
     else
       visible_to_public?
     end
   end
 
-  def visible_to(other_user)
+  def self.visible_to(other_user)
     if other_user.present?
       visible_to_users
     else
