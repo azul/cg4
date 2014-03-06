@@ -18,7 +18,7 @@ class Group < ActiveRecord::Base
 
   def self.visible_to(user)
     if user.present?
-      visible_to_user
+      where visibility: 1..2
     else
       visible_to_visitor
     end
