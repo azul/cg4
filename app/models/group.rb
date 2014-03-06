@@ -1,6 +1,7 @@
 class Group < ActiveRecord::Base
 
-  enum visibility: [:visible_to_member, :visible_to_user, :visible_to_visitor]
+  RELATIONSHIPS = [:admin, :member, :user, :visitor]
+  enum visibility: RELATIONSHIPS.map{|r| "visible_to_#{r}"}
 
   after_initialize :set_default_visibility, :if => :new_record?
 
@@ -9,16 +10,21 @@ class Group < ActiveRecord::Base
   end
 
   def visible_to?(user)
-    if user.present?
-      visible_to_user? || visible_to_visitor?
+    read_attribute(:visibility) >= RELATIONSHIPS.index(relationship_to(user))
+  end
+
+  def relationship_to(user)
+    case user
+    when nil
+      :visitor
     else
-      visible_to_visitor?
+      :user
     end
   end
 
   def self.visible_to(user)
     if user.present?
-      where visibility: 1..2
+      where "visibility > ?", 1
     else
       visible_to_visitor
     end
