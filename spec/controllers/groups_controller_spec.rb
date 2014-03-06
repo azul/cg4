@@ -32,7 +32,7 @@ describe GroupsController do
 
   describe "GET index" do
     it "assigns all groups as @groups" do
-      group = Group.create! valid_attributes.merge({visibility: :visible_to_public})
+      group = Group.create! valid_attributes.merge({visibility: :visible_to_visitor})
       get :index, {}, valid_session
       assigns(:groups).should eq([group])
     end

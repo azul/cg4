@@ -5,11 +5,11 @@ FactoryGirl.define do
     name "MyString"
 
     factory :public_group do
-      visibility :visible_to_public
+      visibility :visible_to_visitor
     end
 
     factory :hidden_group do
-      visibility :hidden
+      visibility :visible_to_member
     end
   end
 end
