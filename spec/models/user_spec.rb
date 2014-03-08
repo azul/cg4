@@ -104,8 +104,16 @@ describe User do
 
     let(:other_user) { FactoryGirl.build :user }
     let(:visitor) { nil }
-    let(:friend) { FactoryGirl.build :user, friend_ids: [user.id] }
-    let(:peer) { FactoryGirl.build :user, peer_ids: [user.id] }
+    let(:friend) {
+      FactoryGirl.build(:user).tap do |u|
+        user.friend_ids = [u.id]
+      end
+    }
+    let(:peer) {
+      FactoryGirl.build(:user).tap do |u|
+        user.peer_ids = [u.id]
+      end
+    }
 
     describe "to visitors" do
       let (:user) { FactoryGirl.create :public_user }

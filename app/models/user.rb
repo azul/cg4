@@ -20,12 +20,34 @@ class User < ActiveRecord::Base
     self.visibility ||= :visible_to_peer
   end
 
-  def visible_to?(other_user)
-    if other_user.present?
-      other_user == self || visible_to_user?
-    else
-      visible_to_visitor?
+  def visible_to?(other)
+    read_attribute(:visibility) >= RELATIONSHIPS.index(relationship_to(other))
+  end
+
+  def relationship_to(user)
+    case user
+    when nil    then :visitor
+    when self   then :self
+    when friend then :friend
+    when peer   then :peer
+    else :user
     end
+  end
+
+  def friend
+    ->x {self.has_friend?(x)}
+  end
+
+  def has_friend?(other)
+    friend_ids && friend_ids.include?(other.id)
+  end
+
+  def peer
+    ->x {self.has_peer?(x)}
+  end
+
+  def has_peer?(other)
+    peer_ids && peer_ids.include?(other.id)
   end
 
   def self.visible_to(other_user)
