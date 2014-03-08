@@ -10,7 +10,11 @@ FactoryGirl.define do
     confirmed_at Time.now
 
     factory :public_user do
-      visibility :visible_to_public
+      visibility :visible_to_visitor
+    end
+
+    factory :hidden_user do
+      visibility :visible_to_self
     end
   end
 end

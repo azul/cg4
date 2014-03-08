@@ -4,7 +4,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   enum role: [:user, :vip, :admin]
-  enum visibility: [:hidden, :visible_to_friends, :visible_to_peers, :visible_to_users, :visible_to_public]
+  RELATIONSHIPS = [:self, :friend, :peer, :user, :visitor]
+  enum visibility: RELATIONSHIPS.map{|r| "visible_to_#{r}"}
+
+  attr_accessor :friend_ids, :peer_ids
 
   after_initialize :set_default_role, :if => :new_record?
   after_initialize :set_default_visibility, :if => :new_record?
@@ -14,22 +17,22 @@ class User < ActiveRecord::Base
   end
 
   def set_default_visibility
-    self.visibility ||= :visible_to_peers
+    self.visibility ||= :visible_to_peer
   end
 
   def visible_to?(other_user)
     if other_user.present?
-      other_user == self || visible_to_users?
+      other_user == self || visible_to_user?
     else
-      visible_to_public?
+      visible_to_visitor?
     end
   end
 
   def self.visible_to(other_user)
     if other_user.present?
-      visible_to_users
+      visible_to_user
     else
-      visible_to_public
+      visible_to_visitor
     end
   end
 

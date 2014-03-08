@@ -100,4 +100,61 @@ describe User do
 
   end
 
+  describe "visible" do
+
+    let(:other_user) { FactoryGirl.build :user }
+    let(:visitor) { nil }
+    let(:friend) { FactoryGirl.build :user, friend_ids: [user.id] }
+    let(:peer) { FactoryGirl.build :user, peer_ids: [user.id] }
+
+    describe "to visitors" do
+      let (:user) { FactoryGirl.create :public_user }
+      it "is visible to visitor" do
+        user.should be_visible_to visitor
+      end
+
+      it "is visible to user" do
+        user.should be_visible_to user
+      end
+    end
+
+    describe "to users" do
+      let (:user) { FactoryGirl.create :user }
+      it "is hidden from visitor" do
+        user.should_not be_visible_to visitor
+      end
+
+      it "is visible to user" do
+        user.should be_visible_to user
+      end
+    end
+
+    describe "to peers" do
+      let (:user) { FactoryGirl.create :user, visibility: :visible_to_peer }
+      it "is hidden from user" do
+        user.should_not be_visible_to other_user
+      end
+
+      it "is visible to peer" do
+        user.should be_visible_to peer
+      end
+
+      it "is visible to friend" do
+        user.should be_visible_to friend
+      end
+    end
+
+    describe "to self" do
+      let (:user) { FactoryGirl.create :hidden_user}
+      it "is hidden from friends" do
+        user.should_not be_visible_to friend
+      end
+
+      it "is visible to self" do
+        user.should be_visible_to user
+      end
+    end
+
+  end
+
 end
