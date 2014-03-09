@@ -18,6 +18,7 @@ describe 'Signup' do
       page.should have_content(I18n.t("devise.registrations.signed_up"))
       user_record = User.find_by_email(user.email)
       user_record.name.should eq(user.name)
+      page.should_not have_content(I18n.t(:login))
     end
 
     it 'reports missing fields' do
