@@ -4,6 +4,6 @@
 - else
   %li= link_to t(:login), new_user_session_path
   %li= link_to t(:sign_up), new_user_registration_path
-- if user_signed_in?
-  %li= link_to t(:users), users_path
+%li= link_to t(:users), users_path
+%li= link_to t("groups.nav"), groups_path
 

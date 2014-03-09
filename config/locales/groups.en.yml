@@ -1,0 +1,16 @@
+en:
+  activerecord:
+    models:
+      group:
+        one: "group"
+        other: "{count} groups"
+    attributes:
+      group:
+        name: "Name"
+  groups:
+    nav: 'Groups'
+    index:
+      directory: "Listing Groups"
+      new: "New Group"
+    new:
+      create: "Create a new group!"

@@ -1,0 +1,9 @@
+%div[group]
+  .name=group.name
+  .actions
+    %ul
+      %li= link_to 'Show', group
+      %li= link_to 'Edit', edit_group_path(group)
+      %li= link_to 'Destroy', group, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+
