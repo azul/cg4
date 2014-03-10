@@ -5,6 +5,8 @@ This application was generated with the [rails_apps_composer](https://github.com
 provided by the [RailsApps Project](http://railsapps.github.io/).
 
 [![Build Status](https://travis-ci.org/azul/cg4.png?branch=master)](https://travis-ci.org/azul/cg4)
+[![Code Climate](https://codeclimate.com/github/azul/cg4.png)](https://codeclimate.com/github/azul/cg4)
+[![Dependency Status](https://gemnasium.com/azul/cg4.png)](https://gemnasium.com/azul/cg4)
 
 Diagnostics
 -
