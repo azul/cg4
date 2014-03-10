@@ -10,6 +10,9 @@ require 'capybara/rspec'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+# Checks for pending migrations before tests are run.
+ActiveRecord::Migration.maintain_test_schema!
+
 RSpec.configure do |config|
   config.include(EmailSpec::Helpers)
   config.include(EmailSpec::Matchers)
