@@ -3,7 +3,7 @@
 
   .form-inputs
     = f.input :name
-    = f.input :visibility, collection: Group::RELATIONSHIPS, label_method: ->(x) {"Visible to #{x}s"}, value_method: ->(x) {"visible_to_#{x}"}, default: :visible_to_member
+    = f.input :visibility, collection: Group.visibilities.keys.map(&:to_sym), default: :visible_to_member
     = f.input :participation
 
   .form-actions

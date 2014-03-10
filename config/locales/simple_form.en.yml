@@ -10,6 +10,15 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    options:
+      group:
+        visibility:
+          visible_to_member: 'Only to members'
+          visible_to_user: 'To everyone logged in'
+          visible_to_visitor: 'To the whole internet'
+    labels:
+      defaults:
+        visibility: 'Visible...'
     # Labels and hints examples
     # labels:
     #   defaults:

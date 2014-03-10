@@ -46,7 +46,8 @@ describe 'Groups' do
     it 'can create visible groups' do
       visit '/groups/new'
       fill_in 'Name', with: 'Visible Test Group'
-      select 'Visible to users', from: 'Visibility'
+      select I18n.t('simple_form.options.group.visibility.visible_to_user'),
+        from: I18n.t('simple_form.labels.defaults.visibility')
       click_button 'Create group'
       created_group.name.should eq('Visible Test Group')
       created_group.visibility.should eq('visible_to_user')
