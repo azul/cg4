@@ -4,6 +4,7 @@ class Group < ActiveRecord::Base
   enum visibility: RELATIONSHIPS.map{|r| "visible_to_#{r}"}
 
   after_initialize :set_default_visibility, :if => :new_record?
+  validates :name, presence: true
 
   def set_default_visibility
     self.visibility ||= :visible_to_member
