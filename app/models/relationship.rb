@@ -17,25 +17,29 @@ class Relationship
   end
 
   def to(other)
-    case other
-    when nil    then :visitor
-    when myself then :myself
-    when friend then :friend
-    when peer   then :peer
-    else :user
+    RELATIONSHIPS.find do |rel|
+      self.send "is_#{rel}?".to_sym, other
     end
   end
 
-  def myself
-    ->x {x == user}
+  def is_myself?(other)
+    other == user
   end
 
-  def friend
-    ->x {user.has_friend?(x)}
+  def is_friend?(other)
+    user.has_friend?(other)
   end
 
-  def peer
-    ->x {user.has_peer?(x)}
+  def is_peer?(other)
+    user.has_peer?(other)
+  end
+
+  def is_user?(other)
+    other.present?
+  end
+
+  def is_visitor?(other)
+    other.blank?
   end
 
 end
