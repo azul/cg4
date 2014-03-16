@@ -14,7 +14,7 @@ FactoryGirl.define do
     end
 
     factory :hidden_user do
-      visibility :visible_to_self
+      visibility :visible_to_myself
     end
   end
 end

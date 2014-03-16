@@ -4,8 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   enum role: [:user, :vip, :admin]
-  RELATIONSHIPS = [:self, :friend, :peer, :user, :visitor]
-  enum visibility: RELATIONSHIPS.map{|r| "visible_to_#{r}"}
+  enum visibility: Relationship.all.map{|r| "visible_to_#{r}"}
 
   attr_accessor :friend_ids, :peer_ids
 
@@ -21,29 +20,15 @@ class User < ActiveRecord::Base
   end
 
   def visible_to?(other)
-    read_attribute(:visibility) >= RELATIONSHIPS.index(relationship_to(other))
+    read_attribute(:visibility) >= relationship.distance_to(other)
   end
 
-  def relationship_to(user)
-    case user
-    when nil    then :visitor
-    when self   then :self
-    when friend then :friend
-    when peer   then :peer
-    else :user
-    end
-  end
-
-  def friend
-    ->x {self.has_friend?(x)}
+  def relationship
+    @relationship ||= Relationship.new(self)
   end
 
   def has_friend?(other)
     friend_ids && friend_ids.include?(other.id)
-  end
-
-  def peer
-    ->x {self.has_peer?(x)}
   end
 
   def has_peer?(other)
