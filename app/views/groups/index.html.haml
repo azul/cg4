@@ -3,6 +3,7 @@
 .directory
   = render @groups
 
+- if user_signed_in?
   %br
   .actions
     = link_to t('.new'), new_group_path

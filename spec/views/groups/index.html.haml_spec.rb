@@ -20,4 +20,18 @@ describe "groups/index.html.haml" do
     rendered.should include("dicer")
     rendered.should include("Show")
   end
+
+  it "displays new group link for users" do
+    assign(:groups, [])
+    sign_in FactoryGirl.create :user
+    render
+    expect(rendered).to include("New Group")
+  end
+
+  it "hides new group link from visitors" do
+    assign(:groups, [])
+    render
+    expect(rendered).to_not include("New Group")
+  end
+
 end

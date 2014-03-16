@@ -36,6 +36,8 @@ describe 'Groups' do
   describe 'creation' do
     let(:created_group) { Group.last }
     it 'can be reached from the landing page' do
+      user = FactoryGirl.create :user
+      login_as user, scope: :user
       visit '/'
       click_on I18n.t("groups.nav")
       click_on I18n.t("groups.index.new")
