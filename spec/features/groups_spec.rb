@@ -11,10 +11,11 @@ describe 'Groups' do
       page.should have_content(I18n.t("groups.index.directory"))
     end
 
-    it 'displays public groups' do
+    it 'links to public groups' do
       group = FactoryGirl.create :public_group
       visit '/groups'
       page.should have_content(group.display_name)
+      page.should have_content("Show")
     end
 
     it 'hides groups from public by default' do
