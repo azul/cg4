@@ -6,6 +6,9 @@ class Group < ActiveRecord::Base
   after_initialize :set_default_visibility, :if => :new_record?
   validates :name, presence: true
 
+  has_many :memberships
+  has_many :users, through: :memberships
+
   def set_default_visibility
     self.visibility ||= :visible_to_member
   end
@@ -16,16 +19,20 @@ class Group < ActiveRecord::Base
 
   def relationship_to(user)
     case user
-    when nil
-      :visitor
-    else
-      :user
+    when nil    then :visitor
+    when member then :member
+    else :user
     end
+  end
+
+  def member
+    ->user {self.memberships.exists?(user_id: user.id)}
   end
 
   def self.visible_to(user)
     if user.present?
-      where "visibility > ?", 1
+      joins("LEFT OUTER JOIN memberships on memberships.group_id = groups.id").
+        where("(memberships.user_id = ?) OR (visibility > ?)", user.id, 1)
     else
       visible_to_visitor
     end

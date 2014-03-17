@@ -1,4 +1,6 @@
 Cg4::Application.routes.draw do
+  resources :memberships
+
   resources :groups
 
   root :to => "home#index"

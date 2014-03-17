@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
   enum role: [:user, :vip, :admin]
   enum visibility: Relationship.all.map{|r| "visible_to_#{r}"}
 
+  has_many :memberships
+  has_many :groups, through: :memberships
+
   attr_accessor :friend_ids, :peer_ids
 
   after_initialize :set_default_role, :if => :new_record?

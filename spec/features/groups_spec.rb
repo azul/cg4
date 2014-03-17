@@ -35,9 +35,13 @@ describe 'Groups' do
 
   describe 'creation' do
     let(:created_group) { Group.last }
-    it 'can be reached from the landing page' do
-      user = FactoryGirl.create :user
+    let(:user) { FactoryGirl.create :user }
+
+    before do
       login_as user, scope: :user
+    end
+
+    it 'can be reached from the landing page' do
       visit '/'
       click_on I18n.t("groups.nav")
       click_on I18n.t("groups.index.new")
@@ -54,6 +58,16 @@ describe 'Groups' do
       click_button 'Create group'
       created_group.name.should eq('Visible Test Group')
       created_group.visibility.should eq('visible_to_user')
+    end
+
+    it 'creator becomes member of group' do
+      visit '/groups/new'
+      fill_in 'Name', with: 'My Test Group'
+      click_button 'Create group'
+      created_group.users.should include(user)
+      created_group.name.should eq('My Test Group')
+      click_on 'Groups'
+      expect(page).to have_content('Edit')
     end
   end
 

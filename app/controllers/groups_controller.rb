@@ -17,8 +17,9 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = Group.new(group_params)
-    flash[:notice] = 'Group was successfully created.' if @group.save
+    if @group = current_user.groups.create(group_params)
+      flash[:notice] = 'Group was successfully created.'
+    end
     respond_with @group
   end
 
