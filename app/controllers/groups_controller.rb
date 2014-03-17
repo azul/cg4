@@ -14,6 +14,7 @@ class GroupsController < ApplicationController
   end
 
   def edit
+    authorize @group
   end
 
   def create
@@ -24,6 +25,7 @@ class GroupsController < ApplicationController
   end
 
   def update
+    authorize @group
     if @group.update(group_params)
       flash[:notice] = 'Group was successfully created.'
     end

@@ -1,12 +1,13 @@
 -cache [group, group.relationship_to(current_user)] do
   %div[group]
     .name=group.name
-    - if group.visible_to?(current_user)
+    - if policy(group).show?
       .actions
         %ul
           %li= link_to 'Show', group
-          - if group.memberships.exists?(user_id: current_user)
+          - if policy(group).edit?
             %li= link_to 'Edit', edit_group_path(group)
+          - if policy(group).destroy?
             %li= link_to 'Destroy', group, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 

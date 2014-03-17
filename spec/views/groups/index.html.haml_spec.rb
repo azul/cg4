@@ -6,15 +6,19 @@ describe "groups/index.html.haml" do
   end
   it "caches groups based on visibility" do
     ActionController::Base.perform_caching = true
+    allow(view).to receive(:policy).and_return double(show?: false)
     assign(:groups, [
       stub_model(Group, name: "dicer", visibility: 'visible_to_user')
     ])
-    view.stub(:current_user).and_return(nil)
     render
     rendered.should include("dicer")
     rendered.should_not include("Show")
 
-    view.stub(:current_user).and_return(User.new)
+    assign(:groups, [
+      stub_model(Group, name: "dicer", visibility: 'visible_to_user', relationship_to: :member)
+    ])
+    allow(view).to receive(:policy).
+      and_return double(show?: true, edit?: false, destroy?: false)
     render
 
     rendered.should include("dicer")

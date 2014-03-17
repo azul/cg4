@@ -12,6 +12,8 @@ describe GroupsController do
   # GroupsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  let(:user) {FactoryGirl.create(:user)}
+
   describe "GET index" do
     it "assigns all groups as @groups" do
       group = Group.create! valid_attributes.merge({visibility: :visible_to_visitor})
@@ -47,7 +49,7 @@ describe GroupsController do
     describe "with valid params" do
 
       before do
-        sign_in FactoryGirl.create(:user)
+        sign_in user
       end
 
       it "creates a new Group" do
@@ -71,7 +73,7 @@ describe GroupsController do
     describe "with invalid params" do
 
       before do
-        sign_in FactoryGirl.create(:user)
+        sign_in user
       end
 
       it "assigns a newly created but unsaved group as @group" do
@@ -90,8 +92,13 @@ describe GroupsController do
 
   describe "PUT update" do
     describe "with valid params" do
+      let(:group) { user.groups.create! valid_attributes }
+
+      before do
+        sign_in user
+      end
+
       it "updates the requested group" do
-        group = Group.create! valid_attributes
         # Assuming there are no other groups in the database, this
         # specifies that the Group created on the previous line
         # receives the :update_attributes message with whatever params are
@@ -101,28 +108,30 @@ describe GroupsController do
       end
 
       it "assigns the requested group as @group" do
-        group = Group.create! valid_attributes
         put :update, {:id => group.to_param, :group => valid_attributes}, valid_session
         assigns(:group).should eq(group)
       end
 
       it "redirects to the group" do
-        group = Group.create! valid_attributes
         put :update, {:id => group.to_param, :group => valid_attributes}, valid_session
         response.should redirect_to(group)
       end
     end
 
     describe "with invalid params" do
+      let(:group) { user.groups.create! valid_attributes }
+
+      before do
+        sign_in user
+      end
+
       it "assigns the group as @group" do
-        group = Group.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         put :update, {:id => group.to_param, :group => { "name" => "" }}, valid_session
         assigns(:group).should eq(group)
       end
 
       it "re-renders the 'edit' template" do
-        group = Group.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         put :update, {:id => group.to_param, :group => { "name" => "" }}, valid_session
         response.should render_template("edit")
