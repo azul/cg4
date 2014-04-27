@@ -13,4 +13,10 @@ class ApplicationController < ActionController::Base
     redirect_to (request.referrer || root_path)
   end
 
+  def require_login
+    user_not_authorized unless user_signed_in?
+  end
+
+  def flash_for(resource)
+  end
 end

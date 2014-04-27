@@ -23,16 +23,24 @@ describe MembershipsController do
   # This should return the minimal set of attributes required to create a valid
   # Membership. As you add validations to Membership, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "group_id" => "1" } }
+  let(:valid_attributes) { { group_id: group.id } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # MembershipsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  let(:user) {FactoryGirl.create(:user)}
+  let(:group) {FactoryGirl.create(:group)}
+  let(:membership) {user.memberships.create! valid_attributes}
+
+  before do
+    sign_in user
+  end
+
   describe "GET index" do
     it "assigns all memberships as @memberships" do
-      membership = Membership.create! valid_attributes
+      membership
       get :index, {}, valid_session
       assigns(:memberships).should eq([membership])
     end
@@ -40,7 +48,6 @@ describe MembershipsController do
 
   describe "GET show" do
     it "assigns the requested membership as @membership" do
-      membership = Membership.create! valid_attributes
       get :show, {:id => membership.to_param}, valid_session
       assigns(:membership).should eq(membership)
     end
@@ -55,7 +62,6 @@ describe MembershipsController do
 
   describe "GET edit" do
     it "assigns the requested membership as @membership" do
-      membership = Membership.create! valid_attributes
       get :edit, {:id => membership.to_param}, valid_session
       assigns(:membership).should eq(membership)
     end
@@ -83,15 +89,11 @@ describe MembershipsController do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved membership as @membership" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Membership.any_instance.stub(:save).and_return(false)
         post :create, {:membership => { "group_id" => "invalid value" }}, valid_session
         assigns(:membership).should be_a_new(Membership)
       end
 
       it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Membership.any_instance.stub(:save).and_return(false)
         post :create, {:membership => { "group_id" => "invalid value" }}, valid_session
         response.should render_template("new")
       end
@@ -101,23 +103,20 @@ describe MembershipsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested membership" do
-        membership = Membership.create! valid_attributes
         # Assuming there are no other memberships in the database, this
         # specifies that the Membership created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Membership.any_instance.should_receive(:update).with({ "group_id" => "1" })
-        put :update, {:id => membership.to_param, :membership => { "group_id" => "1" }}, valid_session
+        Membership.any_instance.should_receive(:update).with({ "group_id" => group.id.to_s })
+        put :update, {:id => membership.to_param, :membership => valid_attributes}, valid_session
       end
 
       it "assigns the requested membership as @membership" do
-        membership = Membership.create! valid_attributes
         put :update, {:id => membership.to_param, :membership => valid_attributes}, valid_session
         assigns(:membership).should eq(membership)
       end
 
       it "redirects to the membership" do
-        membership = Membership.create! valid_attributes
         put :update, {:id => membership.to_param, :membership => valid_attributes}, valid_session
         response.should redirect_to(membership)
       end
@@ -125,17 +124,11 @@ describe MembershipsController do
 
     describe "with invalid params" do
       it "assigns the membership as @membership" do
-        membership = Membership.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Membership.any_instance.stub(:save).and_return(false)
         put :update, {:id => membership.to_param, :membership => { "group_id" => "invalid value" }}, valid_session
         assigns(:membership).should eq(membership)
       end
 
       it "re-renders the 'edit' template" do
-        membership = Membership.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Membership.any_instance.stub(:save).and_return(false)
         put :update, {:id => membership.to_param, :membership => { "group_id" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
@@ -144,14 +137,14 @@ describe MembershipsController do
 
   describe "DELETE destroy" do
     it "destroys the requested membership" do
-      membership = Membership.create! valid_attributes
+      membership
       expect {
         delete :destroy, {:id => membership.to_param}, valid_session
       }.to change(Membership, :count).by(-1)
     end
 
     it "redirects to the memberships list" do
-      membership = Membership.create! valid_attributes
+      membership
       delete :destroy, {:id => membership.to_param}, valid_session
       response.should redirect_to(memberships_url)
     end

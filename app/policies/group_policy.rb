@@ -14,5 +14,4 @@ GroupPolicy = Struct.new(:user, :group) do
   end
   alias_method :edit?, :update?
   alias_method :destroy?, :update?
-
 end

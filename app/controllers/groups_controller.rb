@@ -1,6 +1,10 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: [:show, :edit, :update, :destroy]
+
   respond_to :html
+
+  before_action :require_login, only: [:new, :create]
+  before_action :set_group, only: [:show, :edit, :update, :destroy]
+  after_action :flash_group, only: [:create, :update, :destroy]
 
   def index
     @groups = policy_scope(Group)
@@ -14,38 +18,36 @@ class GroupsController < ApplicationController
   end
 
   def edit
-    authorize @group
   end
 
   def create
-    if @group = current_user.groups.create(group_params)
-      flash[:notice] = 'Group was successfully created.'
-    end
+    @group = current_user.groups.create(group_params)
     respond_with @group
   end
 
   def update
-    authorize @group
-    if @group.update(group_params)
-      flash[:notice] = 'Group was successfully created.'
-    end
+    @group.update group_params
     respond_with @group
   end
 
   def destroy
     @group.destroy
-      flash[:notice] = "Group #{@group.name} was successfully destroyed."
-    respond_with @group
+    redirect_to groups_url
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_group
-      @group = Group.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def group_params
-      params.require(:group).permit(:name, :visibility, :participation)
-    end
+  def set_group
+    @group = Group.find(params[:id])
+    authorize @group
+  end
+
+  def flash_group
+    flash_for @group
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def group_params
+    params.require(:group).permit(:name, :visibility, :participation)
+  end
 end

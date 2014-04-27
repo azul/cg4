@@ -26,7 +26,11 @@ class Group < ActiveRecord::Base
   end
 
   def member
-    ->user {self.memberships.exists?(user_id: user.id)}
+    ->user {self.has_member? user}
+  end
+
+  def has_member?(user)
+    memberships.exists?(user_id: user.id)
   end
 
   def self.visible_to(user)
@@ -41,4 +45,5 @@ class Group < ActiveRecord::Base
   def display_name
     name
   end
+
 end

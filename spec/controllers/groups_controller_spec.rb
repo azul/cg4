@@ -31,7 +31,14 @@ describe GroupsController do
   end
 
   describe "GET new" do
+    it "requires login" do
+      get :new, {}, valid_session
+      assigns(:group).should be_nil
+      response.should redirect_to(root_path)
+    end
+
     it "assigns a new group as @group" do
+      sign_in user
       get :new, {}, valid_session
       assigns(:group).should be_a_new(Group)
     end
@@ -140,15 +147,18 @@ describe GroupsController do
   end
 
   describe "DELETE destroy" do
+    let(:group) { user.groups.create! valid_attributes }
+
     it "destroys the requested group" do
-      group = Group.create! valid_attributes
+      sign_in user
+      group  # ensure group exists before expect
       expect {
         delete :destroy, {:id => group.to_param}, valid_session
       }.to change(Group, :count).by(-1)
     end
 
     it "redirects to the groups list" do
-      group = Group.create! valid_attributes
+      sign_in user
       delete :destroy, {:id => group.to_param}, valid_session
       response.should redirect_to(groups_url)
     end
