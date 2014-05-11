@@ -1,13 +1,5 @@
--cache [group, group.relationship_to(current_user)] do
-  %div[group]
-    .name=group.name
-    - if policy(group).show?
-      .actions
-        %ul
-          %li= link_to 'Show', group
-          - if policy(group).edit?
-            %li= link_to 'Edit', edit_group_path(group)
-          - if policy(group).destroy?
-            %li= link_to 'Destroy', group, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-
+- cache [group, group.relationship_to(current_user)] do
+  .column[group]
+    %h2.name
+      = link_to group.name, group
+    = actions_for(group)

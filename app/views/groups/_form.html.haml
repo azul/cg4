@@ -2,9 +2,10 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name
+    %h2= f.input :name
+    .lead= f.input :description
     = f.input :visibility, collection: Group.visibilities.keys.map(&:to_sym), default: :visible_to_member
     = f.input :participation
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: :submit

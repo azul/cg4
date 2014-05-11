@@ -14,3 +14,5 @@ en:
       new: "New Group"
     new:
       create: "Create a new group!"
+    show:
+      visible_to_member: 'Members only!'

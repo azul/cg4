@@ -1,14 +1,15 @@
+%h1#group-title.title= @group.name
 %p#notice= notice
 
 %p
-  %b Name:
-  = @group.name
-%p
-  %b Visibility:
-  = @group.visibility
+  =t ".#{@group.visibility}"
 %p
   %b Participation:
-  = @group.participation
+  = render @group.users
+.actions
+  = simple_form_for([@group, Membership.new]) do |f|
+    .form-actions
+      = f.button :submit
 
 = link_to 'Edit', edit_group_path(@group)
 \|
