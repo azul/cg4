@@ -1,9 +1,15 @@
 %h1=t(".directory")
 
-.directory
+.row.directory
   = render @groups
 
 - if user_signed_in?
   %br
-  .actions
-    = link_to t('.new'), new_group_path
+  .row.actions
+    %h2=t '.new'
+    = simple_form_for(Group.new) do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :name
+      .form-actions
+        = f.button :submit, class: 'submit'
