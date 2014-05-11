@@ -1,0 +1,14 @@
+%h1=t(".directory")
+
+.row.directory
+  = render collection
+
+- if policy(klass).new?
+  .row.actions
+    %h2=t '.new'
+    = simple_form_for(klass.new) do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :name
+      .form-actions
+        = f.button :submit, class: 'submit'

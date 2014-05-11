@@ -1,15 +1,1 @@
-%h1=t(".directory")
-
-.row.directory
-  = render @groups
-
-- if user_signed_in?
-  %br
-  .row.actions
-    %h2=t '.new'
-    = simple_form_for(Group.new) do |f|
-      = f.error_notification
-      .form-inputs
-        = f.input :name
-      .form-actions
-        = f.button :submit, class: 'submit'
+= render 'layouts/collections/directory', klass: Group, collection: @groups
