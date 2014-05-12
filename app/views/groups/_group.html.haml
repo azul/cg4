@@ -1,5 +1,5 @@
-- cache [group, group.relationship_to(current_user)] do
+- cache group.cache_key(current_user) do
   .column[group]
     %h2.name
-      = link_to group.name, group
-    = actions_for(group)
+      = group.title
+    = group.actions

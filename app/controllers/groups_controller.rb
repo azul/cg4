@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
 
   respond_to :html
+  decorates_assigned :groups, :group
 
   before_action :require_login, only: [:new, :create]
   before_action :set_group, only: [:show, :edit, :update, :destroy]

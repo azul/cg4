@@ -15,6 +15,7 @@ gem 'devise'
 gem 'haml-rails'
 gem 'puma'
 gem 'pundit'
+gem 'draper'
 gem 'simple_form'
 gem 'debugger'
 group :development do

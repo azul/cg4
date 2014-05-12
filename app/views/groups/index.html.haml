@@ -1,1 +1,5 @@
-= render 'layouts/collections/directory', klass: Group, collection: @groups
+%h1= groups.title
+
+.row.directory
+  = groups.list
+
