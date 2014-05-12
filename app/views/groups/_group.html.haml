@@ -1,5 +1,4 @@
 - cache group.cache_key(current_user) do
   .column[group]
-    %h2.name
-      = group.title
-    = group.actions
+    %h2.name= group.title
+    = group.overview_actions

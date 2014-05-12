@@ -1,16 +1,18 @@
-%h1#group-title.title= @group.name
-%p#notice= notice
+.row[group]
+  %h1#group-title.title= group.title
+  %p#notice= notice
 
-%p
-  =t ".#{@group.visibility}"
-%p
-  %b Participation:
-  = render @group.users
-.actions
-  = simple_form_for([@group, Membership.new]) do |f|
-    .form-actions
-      = f.button :submit
+  %p
+    = group.visibility
+  %p
+    %b Participation:
+    = group.members
+  .actions
+    = group.detail_actions
+    = simple_form_for([@group, Membership.new]) do |f|
+      .form-actions
+        = f.button :submit
 
-= link_to 'Edit', edit_group_path(@group)
-\|
-= link_to 'Back', groups_path
+    = link_to 'Edit', edit_group_path(@group)
+    \|
+    = link_to 'Back', groups_path

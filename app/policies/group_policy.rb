@@ -19,6 +19,10 @@ GroupPolicy = Struct.new(:user, :group) do
     !!user
   end
 
+  def index?
+    true
+  end
+
   def may?(action)
     self.send "#{action}?"
   end
@@ -29,31 +33,5 @@ GroupPolicy = Struct.new(:user, :group) do
     end
   end
 
-end
-
-ResourceAction = Struct.new(:resource, :action) do
-  def translation_key
-    "actions.#{resource.class.name.tableize}.#{action}"
-  end
-
-  def url_options
-    if show? or destroy?
-      resource
-    else
-      [action, resource]
-    end
-  end
-
-  def html_options
-    if destroy?
-      {method: :delete, data: {confirm: 'Are you sure'}}
-    else
-      {}
-    end
-  end
-
-  [:index, :show, :new, :edit, :destroy].each do |act|
-    define_method("#{act}?") { action == act }
-  end
 end
 
