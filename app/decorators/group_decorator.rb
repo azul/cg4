@@ -6,7 +6,7 @@ class GroupDecorator < Draper::Decorator
   end
 
   def to_key
-    [object.id]
+    [object.to_key]
   end
 
   def haml_object_ref
@@ -27,6 +27,21 @@ class GroupDecorator < Draper::Decorator
 
   def members
     h.render object.users
+  end
+
+  def allowed_actions_for(user)
+    actions_for(user).select do |action|
+      action.allowed_to? user
+    end
+  end
+
+  def actions_for(user)
+    action = ActionFactory.new
+    action.edit group
+    action.destroy group
+    action.destroy group.memberships.where(user: user).first
+    action.create group.memberships
+    action.index group.class
   end
 
   protected

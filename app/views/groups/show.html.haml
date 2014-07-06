@@ -1,18 +1,5 @@
-.row[group]
-  %h1#group-title.title= group.title
-  %p#notice= notice
-
-  %p
-    = group.visibility
-  %p
-    %b Participation:
-    = group.members
-  .actions
-    = actions do |action|
-      - action.edit group
-      - action.destroy group
-      - action.destroy @membership
-      - action.create group.memberships
-      - action.index group.class
-
-    = link_to 'Back', groups_path
+= section group do
+  = title group
+  = alert notice
+  = intro group
+  = actions group
