@@ -36,12 +36,13 @@ class GroupDecorator < Draper::Decorator
   end
 
   def actions_for(user)
-    action = ActionFactory.new
-    action.edit group
-    action.destroy group
-    action.destroy group.memberships.where(user: user).first
-    action.create group.memberships
-    action.index group.class
+    ActionFactory.new(group) do
+      edit
+      destroy
+      destroy memberships.where(user: user).first
+      create memberships
+      index
+    end
   end
 
   protected

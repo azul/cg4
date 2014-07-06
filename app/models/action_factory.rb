@@ -1,22 +1,26 @@
 class ActionFactory
 
-  def initialize
+  attr_reader :context
+
+  def initialize(context, &block)
+    @context = context
     @content = []
+    self.instance_eval(&block)
   end
 
-  def edit(object)
+  def edit(object=context)
     apply(object, :edit)
   end
 
-  def create(object)
+  def create(object=context)
     apply(object, :create)
   end
 
-  def destroy(object)
+  def destroy(object=context)
     apply(object, :destroy)
   end
 
-  def index(object)
+  def index(object=context)
     apply(object, :index)
   end
 
@@ -33,6 +37,12 @@ class ActionFactory
       ProxyAction
     else
       ResourceAction
+    end
+  end
+
+  def method_missing(meth, *args, &block)
+    if context.respond_to? meth
+      context.send(meth, *args, &block)
     end
   end
 end
@@ -60,8 +70,10 @@ ResourceAction = Struct.new(:resource, :action) do
   end
 
   def url_options
-    if show? or destroy? or index?
+    if show? or destroy?
       resource
+    elsif index?
+      resource.is_a?(ActiveRecord::Base) ? resource.class : resource
     else
       [action, resource]
     end
