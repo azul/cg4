@@ -8,6 +8,7 @@ module ActionHelper
   def render_allowed_actions(&block)
     render allowed_actions(&block)
   end
+  alias_method :actions, :render_allowed_actions
 
   def allowed_actions
     factory = ActionFactory.new

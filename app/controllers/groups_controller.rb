@@ -12,6 +12,7 @@ class GroupsController < ApplicationController
   end
 
   def show
+    @membership = @group.memberships.where(user_id: current_user).first
   end
 
   def new

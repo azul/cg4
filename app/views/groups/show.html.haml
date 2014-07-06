@@ -8,6 +8,11 @@
     %b Participation:
     = group.members
   .actions
-    = group.detail_actions(current_user)
+    = actions do |action|
+      - action.edit group
+      - action.destroy group
+      - action.destroy @membership
+      - action.create group.memberships
+      - action.index group.class
 
     = link_to 'Back', groups_path
