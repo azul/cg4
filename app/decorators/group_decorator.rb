@@ -21,10 +21,11 @@ class GroupDecorator < Draper::Decorator
   end
 
 
-  def detail_actions
+  def detail_actions(user)
     h.render_allowed_actions do |action|
       action.edit group
       action.destroy group
+      action.destroy group.memberships.where(user: user).first
       action.create group.memberships
       action.index group.class
     end

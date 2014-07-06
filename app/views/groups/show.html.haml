@@ -8,11 +8,6 @@
     %b Participation:
     = group.members
   .actions
-    = group.detail_actions
-    = simple_form_for([@group, Membership.new]) do |f|
-      .form-actions
-        = f.button :submit
+    = group.detail_actions(current_user)
 
-    = link_to 'Edit', edit_group_path(@group)
-    \|
     = link_to 'Back', groups_path

@@ -58,7 +58,7 @@ module ActionHelper
 end
 
 module ActionTests
-  [:index, :show, :new, :edit, :destroy].each do |act|
+  [:index, :show, :new, :create, :edit, :update, :destroy].each do |act|
     define_method("#{act}?") { action == act }
   end
 
@@ -72,7 +72,7 @@ ResourceAction = Struct.new(:resource, :action) do
   include ActionTests
 
   def allowed_to?(user)
-    Pundit.policy(user, resource).may? action
+    resource && Pundit.policy(user, resource).may?(action)
   end
 
   def translation_key
@@ -80,7 +80,7 @@ ResourceAction = Struct.new(:resource, :action) do
   end
 
   def url_options
-    if show? or destroy?
+    if show? or destroy? or index?
       resource
     else
       [action, resource]
@@ -108,8 +108,8 @@ ProxyAction = Struct.new(:proxy, :action) do
   end
 
   def url_options
-    if show? or destroy?
-      proxy.klass
+    if show? or destroy? or create?
+      [owner, proxy.klass]
     else
       [action, proxy.klass]
     end
@@ -118,9 +118,15 @@ ProxyAction = Struct.new(:proxy, :action) do
   def html_options
     if destroy?
       {method: :delete, data: {confirm: 'Are you sure'}}
+    elsif create?
+      {method: :post}
     else
       {}
     end
+  end
+
+  def owner
+    proxy.proxy_association.owner
   end
 end
 

@@ -53,6 +53,8 @@ class MembershipsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def membership_params
+    # use the group id from a nested path
+    params[:membership] ||= params.extract!(:group_id)
     params.require(:membership).permit(:group_id)
   end
 end
